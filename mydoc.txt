@@ -1,0 +1,39 @@
+import com.liferay.gradle.util.OSDetector
+
+buildscript {
+ dependencies {
+  classpath group: "com.liferay", name: "com.liferay.gradle.util", version: "1.0.34"
+ }
+ repositories {
+  mavenCentral()
+ }
+}
+
+allprojects {
+ plugins.withId("com.liferay.node") {
+  def nodeArch
+  def nodeExt
+  def nodeOS
+ 
+  if (OSDetector.getBitmode().equals("32")) 
+      nodeArch = "x86"
+  else
+      nodeArch = "x64"
+
+  if (OSDetector.isWindows()) 
+      nodeExt = "zip"
+  else
+      nodeExt = "tar.gz"
+
+  if (OSDetector.isApple()) 
+      nodeOS = "darwin";
+  else if (OSDetector.isWindows()) 
+      nodeOS = "win";
+  else
+      nodeOS = "linux"
+ 
+  node {
+      nodeUrl = "https://nodejs.org/dist/v${nodeVersion}/node-v${nodeVersion}-${nodeOS}-${nodeArch}.${nodeExt}"
+  }
+ }
+}
